@@ -7,8 +7,14 @@ COPY . /var/www/html/
 # Set the working directory
 WORKDIR /var/www/html
 
-# Expose the port the app runs on
-EXPOSE 10000
+# Enable mod_rewrite (if needed for routing)
+RUN a2enmod rewrite
 
-# Start the PHP server
-CMD ["php", "-S", "0.0.0.0:10000", "-t", "/var/www/html"]
+# Set the default index file
+RUN echo "DirectoryIndex begin.php" >> /etc/apache2/apache2.conf
+
+# Expose the port the app runs on
+EXPOSE 80
+
+# Start the Apache server
+CMD ["apache2-foreground"]
